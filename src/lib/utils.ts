@@ -1,9 +1,17 @@
+import { UIMessage } from "ai";
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
+import { AIMessage, HumanMessage } from "@langchain/core/messages";
 /* import { docs_v1 } from "googleapis" */
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
+}
+export const ConvertVercelMessagesToLangchain = (messages:UIMessage[]): any[] => {
+  return messages.map((message) => {
+    message.role === 'user' ? new HumanMessage(message.parts.map((part) => part.type === 'text' ? part.text : "").join(""))
+    : new AIMessage(message.parts.map((part) => part.type === 'text' ? part.text : "").join(""))
+  });
 }
 
 /*
